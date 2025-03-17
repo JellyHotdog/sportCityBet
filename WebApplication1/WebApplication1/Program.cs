@@ -6,7 +6,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAnyOrigin", policy =>
     {
         // For development, allow any origin (adjust this later for production)
-        policy.WithOrigins("https://taupe-malabi-0079ea.netlify.app/")
+        policy.WithOrigins("https://taupe-malabi-0079ea.netlify.app")
 
               .AllowAnyMethod()
               .AllowAnyHeader()
