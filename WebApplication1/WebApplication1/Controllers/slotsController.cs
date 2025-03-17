@@ -10,23 +10,24 @@ namespace WebApplication1.Controllers
     {
         Random random = new Random();
 
-        int calcPoints(int bet)
+        int[] calcPoints(int bet)
         {
 
-            int[] slots = { random.Next(2, 5), random.Next(2, 5), random.Next(2, 5) };
+            int[] slots = {bet, random.Next(2, 5), random.Next(2, 5), random.Next(2, 5) };
 
-            if (slots[0] == slots[1] && slots[1] == slots[2])
+            if (slots[1] == slots[2] && slots[2] == slots[3])
             {
-                return bet * slots[1];
+                slots[0] *= slots[2];
             }
-            else if (slots[0] == slots[1] || slots[1] == slots[2])
+            else if (slots[1] == slots[2] || slots[2] == slots[3])
             {
-                return bet / 2;
+                slots[0] /= 2;
             }
             else
             {
-                return 0;
+                slots[0] = 0;
             }
+            return slots;
         }
 
 
@@ -40,15 +41,15 @@ namespace WebApplication1.Controllers
             }
 
             // Call the slot machine logic to calculate the result
-            int payout = calcPoints(bet.Amount);
+            int[] result = calcPoints(bet.Amount);
 
             // Build the response with the slot results and the payout
             var response = new
             {
                 BetAmount = bet.Amount,
-                Payout = payout,
-                Message = payout > 0 ? "You win!" : "You lose!",
-                SlotResult = $""
+                Payout = result[0],
+                Message = result[0] > 0 ? "You win!" : "You lose!",
+                SlotResult = $"{result[1]}-{result[2]}-{result[3]}"
             };
 
             return Ok(response);
