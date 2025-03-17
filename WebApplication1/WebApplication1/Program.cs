@@ -3,7 +3,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAnyOrigin", policy =>
+    options.AddPolicy("AllowFrontend", policy =>
     {
         // For development, allow any origin (adjust this later for production)
         policy.WithOrigins("https://taupe-malabi-0079ea.netlify.app")
