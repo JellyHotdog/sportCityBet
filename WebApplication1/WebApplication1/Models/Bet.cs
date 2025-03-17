@@ -6,5 +6,7 @@
         public int UserId { get; set; }
         public string Colour { get; set; }
         public int Number { get; set; }
+
+        public string Choice { get; set; }
     }
 }
