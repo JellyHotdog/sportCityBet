@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models;
+using WebApplication1;
+using Npgsql;
 
 namespace WebApplication1.Controllers
 {
@@ -44,6 +46,21 @@ namespace WebApplication1.Controllers
             int[] result = calcPoints(bet.Amount);
 
             //database logic
+            dbConfig db = new dbConfig();
+
+            using (db.dbConn)
+            {
+                db.dbConn.Open();
+
+                string sql = "update points set balence = balance + @payout where user_id = @user_id";
+
+                using (var command = new NpgsqlCommand(sql, db.dbConn))
+                {
+                    command.Parameters.AddWithValue("payout", result[0] > 0 ? result[0] : result[0] - bet.Amount);
+                    command.Parameters.AddWithValue("user_id", bet.UserId);
+                    command.ExecuteNonQuery();
+                }
+            }
 
             // Build the response with the slot results and the payout
             var response = new
