@@ -43,6 +43,10 @@ namespace WebApplication1.Controllers
             // Call the slot machine logic to calculate the result
             int[] result = calcPoints(bet.Amount);
 
+            //write points to database
+
+
+
             // Build the response with the slot results and the payout
             var response = new
             {
