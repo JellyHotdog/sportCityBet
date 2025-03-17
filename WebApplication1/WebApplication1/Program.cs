@@ -1,43 +1,33 @@
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAnyOrigin", policy =>
     {
-        policy.AllowAnyOrigin()  // Allows any origin (for development, you can restrict it to a specific URL later)
+        // For development, allow any origin (adjust this later for production)
+        policy.WithOrigins("https://taupe-malabi-0079ea.netlify.app/")
+
               .AllowAnyMethod()
               .AllowAnyHeader()
               .WithExposedHeaders("Content-Type");
     });
 });
 
-
-
-
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-
+// Apply CORS policy globally (must be done before routing and authorization)
 app.UseCors("AllowAnyOrigin");
 
 app.UseRouting();
 
-//app.UseEndpoints(endpoints =>
-//{
-//    endpoints.MapControllers();
-//});
-
-
-
-// Configure the HTTP request pipeline.
+// Swagger configuration for development environment
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -45,7 +35,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
 
 app.MapControllers();
