@@ -13,20 +13,19 @@ namespace WebApplication1.Controllers
         Random random = new Random();
 
         
-        int[] calcPoints(int bet)
+        int[] calcPoints(int bet, string? colour, int? betNum)
         {
-            Bet _bet = new Bet();
             int result = random.Next(0, 37);
 
-            if (result == _bet.Number)
+            if (result == betNum)
             {
                 bet *= 35;
             }
-            else if (_bet.Colour == "red" || _bet.Colour == "Red" && result % 2 == 0)
+            else if (colour == "red" && result % 2 == 0 || colour == "Red" && result % 2 == 0)
             {
                 bet *= 2;
             }
-            else if (_bet.Colour == "black" || _bet.Colour == "Black" && result % 2 != 0)
+            else if (colour == "black" && result % 2 != 0  || colour == "Black" && result % 2 != 0)
             {
                 bet *= 2;
             }
@@ -50,7 +49,7 @@ namespace WebApplication1.Controllers
             }
 
             // Call the slot machine logic to calculate the result
-            int[] result = calcPoints(bet.Amount);
+            int[] result = calcPoints(bet.Amount, bet.Colour, bet.Number);
 
             //database logic
             dbConfig db = new dbConfig();
