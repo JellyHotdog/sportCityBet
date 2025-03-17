@@ -23,7 +23,7 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // Apply CORS policy globally (must be done before routing and authorization)
-app.UseCors("AllowAnyOrigin");
+app.UseCors("AllowFrontend");
 
 app.UseRouting();
 
