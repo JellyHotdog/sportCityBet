@@ -1,48 +1,48 @@
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAnyOrigin", policy =>
+    options.AddPolicy("AllowSpecificOrigin", policy =>
     {
-        policy.AllowAnyOrigin()  // Allows any origin (for development, you can restrict it to a specific URL later)
-              .AllowAnyMethod()
-              .AllowAnyHeader();
+        // For development, allow any origin (you can restrict this later for production)
+        if (builder.Environment.IsDevelopment())
+        {
+            policy.AllowAnyOrigin();  // Allow all origins during development
+        }
+        else
+        {
+            // In production, restrict to a specific origin (replace with your frontend domain)
+            policy.WithOrigins("https://sportcityapi.azurewebsites.net/")
+                  .AllowAnyMethod()
+                  .AllowAnyHeader();
+        }
     });
 });
 
-
+// Add controllers and other services
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+// Add other services (Swagger, etc.)
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-
-app.UseCors("AllowAnyOrigin");
+// Use CORS policy before routing and authorization middleware
+app.UseCors("AllowSpecificOrigin");
 
 app.UseRouting();
 
-//app.UseEndpoints(endpoints =>
-//{
-//    endpoints.MapControllers();
-//});
-
-
-
-// Configure the HTTP request pipeline.
+// Swagger middleware for development
+app.UseSwagger();
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
     app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
 
 app.MapControllers();
